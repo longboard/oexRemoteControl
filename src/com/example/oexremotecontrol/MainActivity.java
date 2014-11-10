@@ -1,8 +1,14 @@
 package com.example.oexremotecontrol;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +18,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
@@ -31,6 +38,12 @@ public class MainActivity extends ActionBarActivity {
 	public static TextView nmeaString;
 	
 	public static boolean whichVehicle; // boolean to store value of which vehicle we want to control
+	
+	public static Timer timer;
+	public static TimerTask timerTask;
+	
+	//we are going to use a handler to be able to run in our TimerTask
+	final Handler handler = new Handler();
 	
 	public static void updateNmeaString(){
 		int vehicleID = 0;
@@ -87,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		
+		startTimer();
 	}
 	
 
@@ -188,5 +201,45 @@ public class MainActivity extends ActionBarActivity {
 		
 	}
 	
+	  public void startTimer() {
+		  //set a new Timer
+		  timer = new Timer();
+		  //initialize the TimerTask's job
+		  initializeTimerTask();
+		  //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
+		  timer.schedule(timerTask, 5000, 5000); //
+	  }
+	  
+	  public void stoptimertask(View v) {
+	      //stop the timer, if it's not already null
+	      if (timer != null) {
+		     timer.cancel();
+		     timer = null;
+	      }
+	  }
+	  
+	  public void initializeTimerTask() {
+		  timerTask = new TimerTask() {
+		  public void run() {
+		       //use a handler to run a toast that shows the current timestamp
+		       handler.post(new Runnable() {
+		            public void run() {
+		                 //get the current timeStamp
+		                 Calendar calendar = Calendar.getInstance();
+		                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
+		                 final String strDate = simpleDateFormat.format(calendar.getTime());
+		                 //show the toast
+		                 int duration = Toast.LENGTH_SHORT;  
+		                 Toast toast = Toast.makeText(getApplicationContext(), strDate, duration);
+		                 toast.show();
+		                 }
+		             });
+		        }
+		   };
+	  }
 
+
+
+	
+	
 }
