@@ -150,7 +150,19 @@
         android:layout_alignBottom="@+id/linearLayout6"
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/linearLayout6"
-        android:text="$RCMOV Command to vehicle"
+        android:text="$RCMOV,2,000,00000*5b"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/EnableCntrl"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout6"
+        android:layout_below="@+id/linearLayout6"
+        android:layout_marginTop="19dp"
+        android:text="Enable/Disable"
+        android:background="#ff00ff00" 
+        android:onClick="toggleEnableDisable"/>
 
 </RelativeLayout>
